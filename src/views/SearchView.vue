@@ -31,10 +31,7 @@ watch(
 				<h1 class="h2">Result for "{{ routeQueries.q }}"</h1>
 
 				<ul class="recipes-list">
-					<li
-						v-for="recipe in recipes.hits"
-						:key="recipe._links.self.href"
-					>
+					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -55,7 +52,17 @@ watch(
 		list-style: none;
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 24px;
+		gap: 32px;
+
+		@media screen and (min-width: 768px) {
+			grid-template-columns: repeat(2, 1fr);
+			column-gap: 32px;
+			row-gap: 48px;
+		}
+
+		@media screen and (min-width: 992px) {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 }
 </style>
