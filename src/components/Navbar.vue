@@ -15,13 +15,13 @@ import IconLove from '@/components/icons/IconLove.vue';
 				<li class="nav-item">
 					<RouterLink class="nav-link" to="/">
 						<IconHome />
-						<span>Beranda</span>
+						<span>Home</span>
 					</RouterLink>
 				</li>
 				<li class="nav-item">
 					<RouterLink class="nav-link" to="/about">
 						<IconLove />
-						<span>Favorit</span>
+						<span>Favorite</span>
 					</RouterLink>
 				</li>
 			</ul>

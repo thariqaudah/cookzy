@@ -23,23 +23,25 @@ watch(
 <template>
 	<div class="search-view">
 		<div class="container">
-			<h1 class="h2">Menu "{{ route.query.q }}"</h1>
-
 			<div v-if="error">
 				<p>Error: {{ error.message }}</p>
 			</div>
 
-			<ul class="recipes-list" v-else-if="recipes">
-				<li
-					v-for="recipe in recipes.hits"
-					:key="recipe._links.self.href"
-				>
-					<RecipeItem :recipe="recipe" />
-				</li>
-			</ul>
+			<div v-else-if="recipes">
+				<h1 class="h2">Result for "{{ routeQueries.q }}"</h1>
+
+				<ul class="recipes-list">
+					<li
+						v-for="recipe in recipes.hits"
+						:key="recipe._links.self.href"
+					>
+						<RecipeItem :recipe="recipe" />
+					</li>
+				</ul>
+			</div>
 
 			<div v-else>
-				<p>Loading...</p>
+				<p>Find recipes...</p>
 			</div>
 		</div>
 	</div>
@@ -48,5 +50,12 @@ watch(
 <style lang="scss" scoped>
 .search-view {
 	padding: 48px 0;
+
+	.recipes-list {
+		list-style: none;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
 }
 </style>

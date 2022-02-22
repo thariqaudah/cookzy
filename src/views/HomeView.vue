@@ -20,25 +20,26 @@ const searchRecipes = () => {
 	<div class="home-view container">
 		<div class="container">
 			<div class="home-text-box">
-				<h1 class="h1">Mau makan apa?</h1>
+				<h1 class="h1">What do you want to eat?</h1>
 				<p class="text-description">
-					Kamu dapat mencari menu masakan favoritmu disini dengan
-					banyak pilihan pengaturan. Ayo masyak!
+					You can find any food recipe here. Set some options that
+					match your preference. Then, you can bookmark your favorite
+					food recipe with single click. Let's cook!
 				</p>
 				<div class="form-container">
 					<form class="search-form" @submit.prevent="searchRecipes">
 						<label class="form-header" for="recipe"
-							>Cari resep favoritmu</label
+							>Find favorite recipe</label
 						>
 						<div class="form-group">
 							<input
 								id="recipe"
 								type="text"
-								placeholder="Ketik apa saja..."
+								placeholder="Type something..."
 								v-model="searchKeyword"
 							/>
 							<button type="submit" class="search-btn">
-								Cari
+								Search!
 							</button>
 						</div>
 					</form>
@@ -49,7 +50,7 @@ const searchRecipes = () => {
 					<IconHero />
 				</div>
 				<div class="img-text">
-					<p>Menunggu pencarian!</p>
+					<p>Waiting for search.</p>
 				</div>
 			</div>
 		</div>
