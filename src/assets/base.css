@@ -19,7 +19,6 @@
 
 body {
 	font-family: 'Roboto', sans-serif;
-	font-size: 15px;
 	line-height: 1.6;
 	background-color: #eee;
 	color: var(--medium-grey);
@@ -93,5 +92,5 @@ a {
 
 /* 
 STYLE GUIDE:
--- BORDER RADIUS: 11px, 9px, 5px
+-- BORDER RADIUS: 11px, 9px, 5px, 1000px
 */

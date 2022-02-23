@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router';
+
 const props = defineProps({
 	recipe: Object,
 });
@@ -11,30 +13,45 @@ const props = defineProps({
 				:src="recipe.recipe.images.REGULAR.url"
 				alt="Recipe food image thumbnail"
 			/>
+			<button class="btn-bookmark">
+				<font-awesome-icon icon="heart" class="icon-love" />
+			</button>
 		</div>
 		<div class="item-body">
-			<div class="dish-types">
-				<span
-					class="dish-type"
-					v-for="type in recipe.recipe.dishType"
-					:key="type"
-					>{{ type }}</span
-				>
+			<div class="tags">
+				<span class="dish-type">{{
+					$filters.capitalizeString(recipe.recipe.dishType[0])
+				}}</span>
+				<span class="cuisine-type">{{
+					$filters.capitalizeString(recipe.recipe.cuisineType[0])
+				}}</span>
 			</div>
-			<p class="recipe-title">{{ recipe.recipe.label }}</p>
+			<p class="recipe-title">
+				<router-link to="#">
+					{{ recipe.recipe.label }}
+				</router-link>
+			</p>
 			<div class="recipe-details">
-				<ul class="detail-list">
-					<li class="detail-item">
-						<font-awesome-icon icon="clock" />
-						<span>{{ recipe.recipe.totalTime }} minutes</span>
+				<ul class="details-list">
+					<li class="details-item">
+						<font-awesome-icon class="details-icon" icon="clock" />
+						<span
+							>{{
+								recipe.recipe.totalTime !== 0
+									? `${recipe.recipe.totalTime} min`
+									: 'No description'
+							}}
+						</span>
 					</li>
-					<li class="detail-item">
-						<font-awesome-icon icon="clock" />
+					<li class="details-item">
+						<font-awesome-icon class="details-icon" icon="utensils" />
 						<span>{{ recipe.recipe.yield }} servings</span>
 					</li>
-					<li class="detail-item">
-						<font-awesome-icon icon="clock" />
-						<span>{{ recipe.recipe.calories }} kcal</span>
+					<li class="details-item">
+						<font-awesome-icon class="details-icon" icon="fire-flame-curved" />
+						<span
+							>{{ $filters.roundedNumber(recipe.recipe.calories) }} kcal</span
+						>
 					</li>
 				</ul>
 			</div>
@@ -51,39 +68,99 @@ const props = defineProps({
 	overflow: hidden;
 
 	.recipe-thumbnail {
+		position: relative;
+
 		img {
 			width: 100%;
 			height: 250px;
 			object-fit: cover;
 			border-radius: 9px;
 		}
+
+		.btn-bookmark {
+			display: inline-block;
+			position: absolute;
+			top: 3%;
+			right: 3%;
+			border: none;
+			outline: none;
+			background-color: transparent;
+			cursor: pointer;
+
+			&:hover {
+				.icon-love {
+					color: var(--primary-color);
+				}
+			}
+			.icon-love {
+				font-size: 32px;
+				color: #ddd;
+			}
+		}
 	}
 
 	.item-body {
-		padding: 16px 24px;
+		padding: 24px 32px;
 
-		.dish-types {
+		.tags {
 			display: flex;
 			gap: 8px;
 			margin-bottom: 16px;
-			.dish-type {
+			.dish-type,
+			.cuisine-type {
 				display: inline-block;
 				font-size: 14px;
+				font-weight: 500;
 				padding: 6px 12px;
+				border: 3px solid var(--primary-color);
+				border-radius: 1000px;
+				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+			}
+
+			.dish-type {
 				background-color: var(--primary-color);
 				color: #fff;
-				border-radius: 100px;
-				box-shadow: 0 10px 30px rgba(236, 88, 75, 0.1);
+			}
+
+			.cuisine-type {
+				background-color: transparent;
+				color: inherit;
 			}
 		}
 
 		.recipe-title {
-			font-size: 20px;
-			font-weight: 600;
-			color: var(--dark-grey);
-
-			@media screen and (min-width: 768px) {
+			a {
 				font-size: 24px;
+				color: var(--dark-grey);
+				line-height: 1.4;
+				letter-spacing: -0.5px;
+
+				&:hover {
+					color: var(--primary-color);
+				}
+			}
+		}
+
+		.recipe-details {
+			padding-top: 24px;
+
+			.details-list {
+				list-style: none;
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+
+				.details-item {
+					font-size: 16px;
+
+					.details-icon {
+						color: var(--secondary-color);
+					}
+
+					span {
+						margin-left: 8px;
+					}
+				}
 			}
 		}
 	}
