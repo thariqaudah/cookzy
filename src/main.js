@@ -8,12 +8,13 @@ import {
 	faUtensils,
 	faFireFlameCurved,
 	faHeart,
+	faSpoon,
 } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App);
 
 // Fontawesome libarary
-library.add(faClock, faUtensils, faFireFlameCurved, faHeart);
+library.add(faClock, faUtensils, faFireFlameCurved, faHeart, faSpoon);
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Global filters

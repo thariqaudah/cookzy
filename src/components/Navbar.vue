@@ -51,7 +51,7 @@ import IconLove from '@/components/icons/IconLove.vue';
 
 	.nav-list {
 		display: flex;
-		gap: 16px;
+		gap: 24px;
 		list-style: none;
 
 		.nav-link {
@@ -62,7 +62,7 @@ import IconLove from '@/components/icons/IconLove.vue';
 			@media screen and (min-width: 768px) {
 				display: flex;
 				align-items: center;
-				gap: 2px;
+				gap: 4px;
 			}
 
 			span {

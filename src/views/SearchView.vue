@@ -6,14 +6,14 @@ import RecipeItem from '@/components/RecipeItem.vue';
 
 const route = useRoute();
 
-const { data: recipes, error, fetch } = useFetch();
+const { recipes, error, fetchRecipes } = useFetch();
 
 const routeQueries = route.query;
 
 watch(
 	() => route.query.q,
 	async () => {
-		const res = await fetch(routeQueries);
+		const res = await fetchRecipes(routeQueries);
 		console.log(res);
 	},
 	{ immediate: true }
@@ -27,8 +27,8 @@ watch(
 				<p>Error: {{ error.message }}</p>
 			</div>
 
-			<div v-else-if="recipes">
-				<h1 class="h2">Result for "{{ routeQueries.q }}"</h1>
+			<div v-else-if="recipes.hits">
+				<h2 class="h2">Result for "{{ routeQueries.q }}"</h2>
 
 				<ul class="recipes-list">
 					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">

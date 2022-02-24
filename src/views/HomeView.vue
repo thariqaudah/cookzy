@@ -55,7 +55,7 @@ const searchRecipes = () => {
 
 <style scoped lang="scss">
 .home-view {
-	padding: 96px 0;
+	padding: 112px 0;
 
 	.container {
 		display: grid;
@@ -73,6 +73,9 @@ const searchRecipes = () => {
 	.home-text-box {
 		text-align: center;
 
+		@media screen and (min-width: 1200px) {
+			text-align: start;
+		}
 		.text-description {
 			font-size: 18px;
 			margin-bottom: 32px;

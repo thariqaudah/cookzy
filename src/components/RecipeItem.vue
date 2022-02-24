@@ -1,34 +1,43 @@
 <script setup>
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps({
 	recipe: Object,
 });
+
+// Get recipe id from the url
+const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 </script>
 
 <template>
 	<div class="recipe-item" v-if="recipe">
 		<div class="recipe-thumbnail">
-			<img
-				:src="recipe.recipe.images.REGULAR.url"
-				alt="Recipe food image thumbnail"
-			/>
+			<router-link
+				:to="{ name: 'details', params: { id: recipeId } }"
+				class="recipe-link"
+			>
+				<img
+					:src="props.recipe.recipe.images.SMALL.url"
+					:alt="props.recipe.recipe.label"
+				/>
+			</router-link>
 			<button class="btn-bookmark">
 				<font-awesome-icon icon="heart" class="icon-love" />
 			</button>
 		</div>
 		<div class="item-body">
 			<div class="tags">
-				<span class="dish-type">{{
-					$filters.capitalizeString(recipe.recipe.dishType[0])
+				<span class="tag tag-primary">{{
+					$filters.capitalizeString(props.recipe.recipe.dishType[0])
 				}}</span>
-				<span class="cuisine-type">{{
-					$filters.capitalizeString(recipe.recipe.cuisineType[0])
+				<span class="tag tag-outline">{{
+					$filters.capitalizeString(props.recipe.recipe.cuisineType[0])
 				}}</span>
 			</div>
 			<p class="recipe-title">
-				<router-link to="#">
-					{{ recipe.recipe.label }}
+				<router-link :to="{ name: 'details', params: { id: recipeId } }">
+					{{ props.recipe.recipe.label }}
 				</router-link>
 			</p>
 			<div class="recipe-details">
@@ -37,20 +46,23 @@ const props = defineProps({
 						<font-awesome-icon class="details-icon" icon="clock" />
 						<span
 							>{{
-								recipe.recipe.totalTime !== 0
-									? `${recipe.recipe.totalTime} min`
+								props.recipe.recipe.totalTime !== 0
+									? `${props.recipe.recipe.totalTime} min`
 									: 'No description'
 							}}
 						</span>
 					</li>
 					<li class="details-item">
 						<font-awesome-icon class="details-icon" icon="utensils" />
-						<span>{{ recipe.recipe.yield }} servings</span>
+						<span>{{ props.recipe.recipe.yield }} servings</span>
 					</li>
 					<li class="details-item">
 						<font-awesome-icon class="details-icon" icon="fire-flame-curved" />
 						<span
-							>{{ $filters.roundedNumber(recipe.recipe.calories) }} kcal</span
+							>{{
+								$filters.roundedNumber(props.recipe.recipe.calories)
+							}}
+							kcal</span
 						>
 					</li>
 				</ul>
@@ -66,22 +78,33 @@ const props = defineProps({
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 	border-radius: 9px;
 	overflow: hidden;
+	position: relative;
+
+	&:hover {
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+		.icon-love {
+			color: #fff !important;
+		}
+	}
 
 	.recipe-thumbnail {
-		position: relative;
-
-		img {
+		.recipe-link {
 			width: 100%;
-			height: 250px;
-			object-fit: cover;
-			border-radius: 9px;
+			height: auto;
+
+			img {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				border-radius: 9px;
+			}
 		}
 
 		.btn-bookmark {
 			display: inline-block;
 			position: absolute;
-			top: 3%;
-			right: 3%;
+			top: 1%;
+			right: 2%;
 			border: none;
 			outline: none;
 			background-color: transparent;
@@ -94,39 +117,13 @@ const props = defineProps({
 			}
 			.icon-love {
 				font-size: 32px;
-				color: #ddd;
+				color: #ccc;
 			}
 		}
 	}
 
 	.item-body {
 		padding: 24px 32px;
-
-		.tags {
-			display: flex;
-			gap: 8px;
-			margin-bottom: 16px;
-			.dish-type,
-			.cuisine-type {
-				display: inline-block;
-				font-size: 14px;
-				font-weight: 500;
-				padding: 6px 12px;
-				border: 3px solid var(--primary-color);
-				border-radius: 1000px;
-				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-			}
-
-			.dish-type {
-				background-color: var(--primary-color);
-				color: #fff;
-			}
-
-			.cuisine-type {
-				background-color: transparent;
-				color: inherit;
-			}
-		}
 
 		.recipe-title {
 			a {
@@ -136,7 +133,7 @@ const props = defineProps({
 				letter-spacing: -0.5px;
 
 				&:hover {
-					color: var(--primary-color);
+					text-decoration: underline;
 				}
 			}
 		}
