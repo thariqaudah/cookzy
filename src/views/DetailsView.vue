@@ -1,8 +1,12 @@
 <script setup>
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import useFetch from '../composables/useFetch';
 
 const { recipe, error, fetchRecipe } = useFetch();
+
+const servings = ref(null);
+
+const updateServings = () => {};
 
 const props = defineProps({
 	id: String,
@@ -13,6 +17,7 @@ watch(
 	() => props.id,
 	async () => {
 		const res = await fetchRecipe(props.id);
+		servings.value = res.data.recipe.yield;
 		console.log(res);
 	},
 	{ immediate: true }
@@ -36,12 +41,26 @@ watch(
 					<h2 class="h2">{{ recipe.recipe.label }}</h2>
 					<p class="recipe-description">
 						{{
-							`${$filters.capitalizeString(
-								recipe.recipe.cuisineType[0]
-							)} ${recipe.recipe.dishType[0]}`
+							`${$filters.capitalizeString(recipe.recipe.cuisineType[0])} ${
+								recipe.recipe.dishType[0]
+							}`
 						}}
 						food
 					</p>
+					<!-- FORM SERVINGS -->
+					<form class="form-servings">
+						<div class="form-group">
+							<button type="button">
+								<font-awesome-icon icon="minus" />
+							</button>
+							<input type="number" v-model="servings" />
+							<button type="button">
+								<font-awesome-icon icon="plus" />
+							</button>
+						</div>
+						Servings
+					</form>
+					<!-- SNAPSHOT -->
 					<div class="details-snapshot">
 						<div class="snap">
 							<div class="snap-icon">
@@ -58,25 +77,18 @@ watch(
 							</div>
 							<div class="snap-text">
 								<span>Ingredients</span>
-								<span>{{
-									recipe.recipe.ingredients.length
-								}}</span>
+								<span>{{ recipe.recipe.ingredients.length }}</span>
 							</div>
 						</div>
 						<div class="snap">
 							<div class="snap-icon">
-								<font-awesome-icon
-									class="icon"
-									icon="fire-flame-curved"
-								/>
+								<font-awesome-icon class="icon" icon="fire-flame-curved" />
 							</div>
 							<div class="snap-text">
 								<span>Calories</span>
 								<span
 									>{{
-										$filters.roundedNumber(
-											recipe.recipe.calories
-										)
+										$filters.roundedNumber(recipe.recipe.calories)
 									}}
 									Kcal</span
 								>
@@ -100,8 +112,7 @@ watch(
 						<div class="tags">
 							<span
 								class="tag tag-secondary"
-								v-for="(healthLabel, index) in recipe.recipe
-									.healthLabels"
+								v-for="(healthLabel, index) in recipe.recipe.healthLabels"
 								:key="healthLabel"
 								v-show="index < 5"
 							>
@@ -112,26 +123,29 @@ watch(
 				</div>
 
 				<div class="recipe-ing">
-					<h3 class="h3">Ingredients</h3>
+					<div class="ing-header">
+						<h3 class="h3">Ingredients</h3>
+						<p class="ing-description">
+							For {{ recipe.recipe.yield }} servings
+						</p>
+					</div>
 					<ul class="ing-list">
 						<li
 							class="ing-item"
 							v-for="ing in recipe.recipe.ingredients"
 							:key="ing.foodId"
 						>
-							<div class="ing-main">
-								<img
-									class="ing-img"
-									:src="ing.image"
-									:alt="ing.food"
-								/>
-								<p class="ing-text">
+							<div class="ing-img">
+								<img :src="ing.image" :alt="ing.food" />
+							</div>
+							<div class="ing-text">
+								<p class="text-title">
 									{{ $filters.capitalizeString(ing.food) }}
 								</p>
+								<p class="text-detail">
+									{{ `${ing.weight} ${ing.measure}` }}
+								</p>
 							</div>
-							<p class="ing-detail">
-								{{ `${ing.quantity} ${ing.measure}` }}
-							</p>
 						</li>
 					</ul>
 				</div>
@@ -148,7 +162,13 @@ watch(
 
 	.recipe-container {
 		display: grid;
+		grid-template-columns: 1fr;
 		gap: 32px;
+
+		@media screen and (min-width: 992px) {
+			grid-template-columns: 1fr 1fr;
+			column-gap: 96px;
+		}
 
 		.recipe-img-box {
 			.recipe-img {
@@ -160,15 +180,72 @@ watch(
 		}
 
 		.recipe-text-box {
+			.h2 {
+				margin-bottom: 16px;
+			}
 			.recipe-description {
 				font-size: 18px;
 				margin-bottom: 48px;
 			}
 
+			.form-servings {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				margin-bottom: 32px;
+				.form-group {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 16px;
+					width: 100px;
+					padding: 12px;
+					border-radius: 11px;
+					background-color: #e0e0e0;
+				}
+
+				input[type='number']::-webkit-inner-spin-button,
+				input[type='number']::-webkit-outer-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
+
+				input[type='number'] {
+					-moz-appearance: textfield;
+				}
+
+				input[type='number'] {
+					display: inline-block;
+					width: 100%;
+					border: none;
+					outline: none;
+					font-family: inherit;
+					font-size: 16px;
+					padding: 0;
+					margin: 0;
+					text-align: center;
+					background-color: transparent;
+					font-weight: 500;
+					pointer-events: none;
+				}
+
+				button[type='button'] {
+					display: inline-block;
+					border: none;
+					background-color: transparent;
+					color: var(--light-grey);
+					cursor: pointer;
+
+					&:hover {
+						color: var(--dark-grey);
+					}
+				}
+			}
+
 			.details-snapshot {
 				display: flex;
 				justify-content: space-between;
-				margin-bottom: 48px;
+				margin-bottom: 32px;
 
 				.snap {
 					display: flex;
@@ -176,7 +253,7 @@ watch(
 					text-align: center;
 					gap: 16px;
 
-					@media screen and (min-width: 576px) {
+					@media screen and (min-width: 1200px) {
 						flex-direction: row;
 						align-items: center;
 						text-align: start;
@@ -185,11 +262,12 @@ watch(
 					.snap-icon {
 						width: 60px;
 						height: 60px;
+						margin: 0 auto;
 						display: flex;
 						justify-content: center;
 						align-items: center;
 						border-radius: 9px;
-						background-color: #ddd;
+						background-color: #e0e0e0;
 						.icon {
 							color: var(--secondary-color);
 							font-size: 28px;
@@ -225,19 +303,50 @@ watch(
 		}
 
 		.recipe-ing {
+			.ing-header {
+				// display: flex;
+				// justify-content: space-between;
+				// align-items: center;
+				margin-bottom: 32px;
+
+				.h3 {
+					margin-bottom: 8px;
+				}
+
+				.ing-description {
+					color: #777;
+				}
+			}
 			.ing-list {
+				display: flex;
+				flex-direction: column;
+				gap: 32px;
 				.ing-item {
 					display: flex;
-					justify-content: space-between;
 					align-items: center;
-					.ing-main {
-						display: flex;
-						align-items: center;
-						.ing-img {
-							width: 50px;
-							height: 50px;
+					gap: 24px;
+
+					.ing-img {
+						width: 60px;
+						height: 60px;
+						border: 3px solid var(--light-grey);
+						border-radius: 50%;
+
+						img {
+							width: 100%;
 							border-radius: 50%;
 							object-fit: cover;
+						}
+					}
+					.ing-text {
+						.text-title {
+							font-size: 16px;
+							font-weight: 500;
+							color: var(--dark-grey);
+						}
+
+						.text-detail {
+							font-size: 14px;
 						}
 					}
 				}
