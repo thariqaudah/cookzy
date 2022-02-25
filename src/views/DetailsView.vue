@@ -36,34 +36,47 @@ watch(
 					<h2 class="h2">{{ recipe.recipe.label }}</h2>
 					<p class="recipe-description">
 						{{
-							`${$filters.capitalizeString(recipe.recipe.cuisineType[0])} ${
-								recipe.recipe.dishType[0]
-							}`
+							`${$filters.capitalizeString(
+								recipe.recipe.cuisineType[0]
+							)} ${recipe.recipe.dishType[0]}`
 						}}
 						food
 					</p>
 					<div class="details-snapshot">
 						<div class="snap">
-							<font-awesome-icon class="snap-icon" icon="clock" />
+							<div class="snap-icon">
+								<font-awesome-icon class="icon" icon="clock" />
+							</div>
 							<div class="snap-text">
 								<span>Time</span>
 								<span>{{ recipe.recipe.totalTime }} Min</span>
 							</div>
 						</div>
 						<div class="snap">
-							<font-awesome-icon class="snap-icon" icon="spoon" />
+							<div class="snap-icon">
+								<font-awesome-icon class="icon" icon="spoon" />
+							</div>
 							<div class="snap-text">
 								<span>Ingredients</span>
-								<span>{{ recipe.recipe.ingredients.length }}</span>
+								<span>{{
+									recipe.recipe.ingredients.length
+								}}</span>
 							</div>
 						</div>
 						<div class="snap">
-							<font-awesome-icon class="snap-icon" icon="fire-flame-curved" />
+							<div class="snap-icon">
+								<font-awesome-icon
+									class="icon"
+									icon="fire-flame-curved"
+								/>
+							</div>
 							<div class="snap-text">
 								<span>Calories</span>
 								<span
 									>{{
-										$filters.roundedNumber(recipe.recipe.calories)
+										$filters.roundedNumber(
+											recipe.recipe.calories
+										)
 									}}
 									Kcal</span
 								>
@@ -87,7 +100,8 @@ watch(
 						<div class="tags">
 							<span
 								class="tag tag-secondary"
-								v-for="(healthLabel, index) in recipe.recipe.healthLabels"
+								v-for="(healthLabel, index) in recipe.recipe
+									.healthLabels"
 								:key="healthLabel"
 								v-show="index < 5"
 							>
@@ -106,12 +120,18 @@ watch(
 							:key="ing.foodId"
 						>
 							<div class="ing-main">
-								<img class="ing-img" :src="ing.image" :alt="ing.food" />
+								<img
+									class="ing-img"
+									:src="ing.image"
+									:alt="ing.food"
+								/>
 								<p class="ing-text">
 									{{ $filters.capitalizeString(ing.food) }}
 								</p>
 							</div>
-							<p class="ing-detail">{{ `${ing.quantity} ${ing.measure}` }}</p>
+							<p class="ing-detail">
+								{{ `${ing.quantity} ${ing.measure}` }}
+							</p>
 						</li>
 					</ul>
 				</div>
@@ -163,8 +183,17 @@ watch(
 					}
 
 					.snap-icon {
-						color: var(--secondary-color);
-						font-size: 28px;
+						width: 60px;
+						height: 60px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						border-radius: 9px;
+						background-color: #ddd;
+						.icon {
+							color: var(--secondary-color);
+							font-size: 28px;
+						}
 					}
 
 					.snap-text {
