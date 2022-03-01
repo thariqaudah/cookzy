@@ -15,8 +15,7 @@ const props = defineProps({
 
 const ingredientsQty = computed(() => {
 	return recipe.value.recipe.ingredients.map(
-		(ing) => (ing.quantity / recipe.value.recipe.yield) * servings.value
-	);
+		(ing) => (Math.round(((ing.quantity / recipe.value.recipe.yield) * servings.value) * 100)) / 100);
 });
 
 const updateServings = (opt) => {

@@ -12,6 +12,7 @@ import {
 	faPlus,
 	faMinus,
 	faArrowRight,
+	faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App);
@@ -25,7 +26,8 @@ library.add(
 	faSpoon,
 	faPlus,
 	faMinus,
-	faArrowRight
+	faArrowRight,
+	faChevronDown
 );
 app.component('font-awesome-icon', FontAwesomeIcon);
 

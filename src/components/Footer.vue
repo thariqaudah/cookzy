@@ -12,7 +12,7 @@
 
 <style lang="scss" scoped>
 .footer {
-	padding: 112px 0 48px;
+	padding: 112px 0 32px;
 	text-align: center;
 	color: #999;
 
