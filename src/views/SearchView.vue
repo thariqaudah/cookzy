@@ -28,10 +28,16 @@ watch(
 			</div>
 
 			<div v-else-if="recipes.hits">
-				<h2 class="h2">Result for "{{ routeQueries.q }}"</h2>
+				<header class="recipes-header">
+					<h2 class="h2">Results for "{{ routeQueries.q }}"</h2>
+					<p class="subtitle">Found {{ recipes.count }} recipes</p>
+				</header>
 
 				<ul class="recipes-list">
-					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
+					<li
+						v-for="recipe in recipes.hits"
+						:key="recipe._links.self.href"
+					>
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -48,7 +54,12 @@ watch(
 .search-view {
 	padding: 48px 0;
 
+	.recipes-header {
+		// marginbottom
+	}
+
 	.recipes-list {
+		padding: 32px 0;
 		list-style: none;
 		display: grid;
 		grid-template-columns: 1fr;

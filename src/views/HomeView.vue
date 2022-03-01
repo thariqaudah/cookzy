@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import IconHero from '@/components/icons/IconHero.vue';
+import Footer from '@/components/Footer.vue';
 
 const searchKeyword = ref(null);
 
@@ -17,18 +18,20 @@ const searchRecipes = () => {
 </script>
 
 <template>
-	<div class="home-view container">
+	<div class="home-view">
 		<div class="container">
 			<div class="home-text-box">
-				<h1 class="h1">What do you want to eat?</h1>
+				<h1 class="h1">What do you want to cook?</h1>
 				<p class="text-description">
-					You can find any food recipe here. Set some options that match your
-					preference. Then, you can bookmark your favorite food recipe with
-					single click. Let's cook!
+					You can find any food recipe here. Set some options that
+					match your preference. Then, you can bookmark your favorite
+					food recipe with single click. Let's cook!
 				</p>
 				<div class="form-container">
 					<form class="search-form" @submit.prevent="searchRecipes">
-						<label class="form-header" for="recipe">Find favorite recipe</label>
+						<label class="form-header" for="recipe"
+							>Find favorite recipe</label
+						>
 						<div class="form-group">
 							<input
 								id="recipe"
@@ -36,7 +39,9 @@ const searchRecipes = () => {
 								placeholder="Type something..."
 								v-model="searchKeyword"
 							/>
-							<button type="submit" class="search-btn">Search!</button>
+							<button type="submit" class="btn search-btn">
+								Search!
+							</button>
 						</div>
 					</form>
 				</div>
@@ -51,6 +56,8 @@ const searchRecipes = () => {
 			</div>
 		</div>
 	</div>
+
+	<Footer />
 </template>
 
 <style scoped lang="scss">
@@ -135,6 +142,7 @@ const searchRecipes = () => {
 				}
 
 				.search-btn {
+					display: inline-block;
 					padding: 16px 32px;
 					background-color: var(--dark-grey);
 					color: #fff;

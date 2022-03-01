@@ -8,6 +8,18 @@ const props = defineProps({
 
 // Get recipe id from the url
 const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
+
+const saveRecipe = () => {
+	const savedRecipes =
+		JSON.parse(window.localStorage.getItem('savedRecipes')) || [];
+	savedRecipes.push({
+		id: recipeId.value,
+	});
+
+	// Saved to LocalStorage
+	window.localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+	console.log(savedRecipes);
+};
 </script>
 
 <template>
@@ -22,7 +34,7 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 					:alt="props.recipe.recipe.label"
 				/>
 			</router-link>
-			<button class="btn-bookmark">
+			<button class="btn-bookmark" @click="saveRecipe">
 				<font-awesome-icon icon="heart" class="icon-love" />
 			</button>
 		</div>
@@ -32,11 +44,15 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 					$filters.capitalizeString(props.recipe.recipe.dishType[0])
 				}}</span>
 				<span class="tag tag-outline">{{
-					$filters.capitalizeString(props.recipe.recipe.cuisineType[0])
+					$filters.capitalizeString(
+						props.recipe.recipe.cuisineType[0]
+					)
 				}}</span>
 			</div>
 			<p class="recipe-title">
-				<router-link :to="{ name: 'details', params: { id: recipeId } }">
+				<router-link
+					:to="{ name: 'details', params: { id: recipeId } }"
+				>
 					{{ props.recipe.recipe.label }}
 				</router-link>
 			</p>
@@ -53,14 +69,22 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 						</span>
 					</li>
 					<li class="details-item">
-						<font-awesome-icon class="details-icon" icon="utensils" />
+						<font-awesome-icon
+							class="details-icon"
+							icon="utensils"
+						/>
 						<span>{{ props.recipe.recipe.yield }} servings</span>
 					</li>
 					<li class="details-item">
-						<font-awesome-icon class="details-icon" icon="fire-flame-curved" />
+						<font-awesome-icon
+							class="details-icon"
+							icon="fire-flame-curved"
+						/>
 						<span
 							>{{
-								$filters.roundedNumber(props.recipe.recipe.calories)
+								$filters.roundedNumber(
+									props.recipe.recipe.calories
+								)
 							}}
 							kcal</span
 						>
@@ -82,9 +106,6 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 
 	&:hover {
 		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-		.icon-love {
-			color: #fff !important;
-		}
 	}
 
 	.recipe-thumbnail {
@@ -105,9 +126,11 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 			position: absolute;
 			top: 1%;
 			right: 2%;
+			padding: 8px;
 			border: none;
 			outline: none;
-			background-color: transparent;
+			background-color: #fff;
+			border-radius: 7px;
 			cursor: pointer;
 
 			&:hover {
@@ -116,7 +139,7 @@ const recipeId = computed(() => props.recipe._links.self.href.substr(38, 32));
 				}
 			}
 			.icon-love {
-				font-size: 32px;
+				font-size: 24px;
 				color: #ccc;
 			}
 		}

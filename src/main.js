@@ -11,6 +11,7 @@ import {
 	faSpoon,
 	faPlus,
 	faMinus,
+	faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App);
@@ -23,7 +24,8 @@ library.add(
 	faHeart,
 	faSpoon,
 	faPlus,
-	faMinus
+	faMinus,
+	faArrowRight
 );
 app.component('font-awesome-icon', FontAwesomeIcon);
 

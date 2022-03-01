@@ -6,10 +6,10 @@ const useFetch = () => {
 	const recipe = ref(null);
 	const error = ref(null);
 
-	const fetchRecipes = async queries => {
+	const fetchRecipes = async (queries) => {
 		try {
 			const res = await axios.get(
-				`${import.meta.env.VITE_API_URL}?type=public&random=true&app_id=${
+				`${import.meta.env.VITE_API_URL}?type=public&app_id=${
 					import.meta.env.VITE_API_ID
 				}&app_key=${import.meta.env.VITE_API_KEY}&q=${queries.q}`
 			);
@@ -21,7 +21,7 @@ const useFetch = () => {
 		}
 	};
 
-	const fetchRecipe = async id => {
+	const fetchRecipe = async (id) => {
 		try {
 			const res = await axios.get(
 				`${import.meta.env.VITE_API_URL}/${id}?type=public&app_id=${
