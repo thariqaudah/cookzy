@@ -33,7 +33,10 @@ watch(
 				<header class="recipes-header">
 					<h2 class="h2">Results for "{{ routeQueries.q }}"</h2>
 					<div class="recipe-filtering">
-						<div class="filter-dropdown" @click="filterDiets = !filterDiets">
+						<div
+							class="filter-dropdown"
+							@click="filterDiets = !filterDiets"
+						>
 							<div class="dropdown-header">
 								<span>Diets Label</span>
 								<font-awesome-icon
@@ -42,16 +45,77 @@ watch(
 									:class="{ rotate: filterDiets === true }"
 								/>
 							</div>
-							<div class="dropdown-content" v-if="filterDiets">
-								<p>This is a filter</p>
-							</div>
+							<Transition name="dropdown">
+								<div
+									class="dropdown-content"
+									v-show="filterDiets"
+								>
+									<form class="dropdown-form">
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+											/>
+											<label for="balanced"
+												>Balanced</label
+											>
+										</div>
+										<div class="form-group">
+											<input
+												id="high-fiber"
+												type="checkbox"
+											/>
+											<label for="high-fiber"
+												>high-fiber</label
+											>
+										</div>
+										<div class="form-group">
+											<input
+												id="high-protein"
+												type="checkbox"
+											/>
+											<label for="high-protein"
+												>high-protein</label
+											>
+										</div>
+										<div class="form-group">
+											<input
+												id="low-carb"
+												type="checkbox"
+											/>
+											<label for="low-carb"
+												>low-carb</label
+											>
+										</div>
+										<div class="form-group">
+											<input
+												id="low-fat"
+												type="checkbox"
+											/>
+											<label for="low-fat">low-fat</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="low-sodium"
+												type="checkbox"
+											/>
+											<label for="low-sodium"
+												>low-sodium</label
+											>
+										</div>
+									</form>
+								</div>
+							</Transition>
 						</div>
 					</div>
 					<p class="subtitle">Found {{ recipes.count }} recipes</p>
 				</header>
 
 				<ul class="recipes-list">
-					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
+					<li
+						v-for="recipe in recipes.hits"
+						:key="recipe._links.self.href"
+					>
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -70,6 +134,10 @@ watch(
 
 	.recipes-header {
 		margin-bottom: 32px;
+
+		.h2 {
+			margin-bottom: 32px;
+		}
 
 		.recipe-filtering {
 			margin-bottom: 16px;
@@ -117,6 +185,19 @@ watch(
 					border-radius: 9px;
 					box-shadow: 0 5px 10px rgba(0, 0, 0, 0.075);
 					z-index: 1000;
+
+					.dropdown-form {
+						width: 100%;
+						display: grid;
+						grid-template-columns: 1fr;
+						gap: 12px;
+
+						.form-group {
+							input[type='checkbox'] {
+								margin-right: 8px;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -138,6 +219,21 @@ watch(
 		@media screen and (min-width: 992px) {
 			grid-template-columns: repeat(3, 1fr);
 		}
+	}
+
+	// Transition class
+	.dropdown-enter-active,
+	.dropdown-leave-active {
+		transition: all 0.2s ease-in;
+	}
+
+	.dropdown-enter-from,
+	.dropdown-leave-to {
+		opacity: 0;
+	}
+
+	.dropdown-enter-to {
+		opacity: 1;
 	}
 }
 </style>
