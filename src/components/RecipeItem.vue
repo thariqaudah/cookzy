@@ -44,15 +44,11 @@ const saveRecipe = () => {
 					$filters.capitalizeString(props.recipe.recipe.dishType[0])
 				}}</span>
 				<span class="tag tag-outline">{{
-					$filters.capitalizeString(
-						props.recipe.recipe.cuisineType[0]
-					)
+					$filters.capitalizeString(props.recipe.recipe.cuisineType[0])
 				}}</span>
 			</div>
 			<p class="recipe-title">
-				<router-link
-					:to="{ name: 'details', params: { id: recipeId } }"
-				>
+				<router-link :to="{ name: 'details', params: { id: recipeId } }">
 					{{ props.recipe.recipe.label }}
 				</router-link>
 			</p>
@@ -69,22 +65,14 @@ const saveRecipe = () => {
 						</span>
 					</li>
 					<li class="details-item">
-						<font-awesome-icon
-							class="details-icon"
-							icon="utensils"
-						/>
+						<font-awesome-icon class="details-icon" icon="utensils" />
 						<span>{{ props.recipe.recipe.yield }} servings</span>
 					</li>
 					<li class="details-item">
-						<font-awesome-icon
-							class="details-icon"
-							icon="fire-flame-curved"
-						/>
+						<font-awesome-icon class="details-icon" icon="fire-flame-curved" />
 						<span
 							>{{
-								$filters.roundedNumber(
-									props.recipe.recipe.calories
-								)
+								$filters.roundedNumber(props.recipe.recipe.calories)
 							}}
 							kcal</span
 						>
@@ -146,7 +134,11 @@ const saveRecipe = () => {
 	}
 
 	.item-body {
-		padding: 24px 32px;
+		padding: 16px;
+
+		@media screen and (min-width: 768px) {
+			padding: 24px 32px;
+		}
 
 		.recipe-title {
 			a {

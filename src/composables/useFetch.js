@@ -6,13 +6,17 @@ const useFetch = () => {
 	const recipe = ref(null);
 	const error = ref(null);
 
-	const fetchRecipes = async (queries) => {
+	const fetchRecipes = async queries => {
 		try {
-			const res = await axios.get(
-				`${import.meta.env.VITE_API_URL}?type=public&app_id=${
-					import.meta.env.VITE_API_ID
-				}&app_key=${import.meta.env.VITE_API_KEY}&q=${queries.q}`
-			);
+			let query = `${import.meta.env.VITE_API_URL}?type=public&app_id=${
+				import.meta.env.VITE_API_ID
+			}&app_key=${import.meta.env.VITE_API_KEY}&q=${queries.q}`;
+
+			if (queries.diets.length) {
+				queries.diets.forEach(dietLabel => (query += `&diet=${dietLabel}`));
+			}
+
+			const res = await axios.get(query);
 			recipes.value = res.data;
 			return res;
 		} catch (err) {
@@ -21,7 +25,7 @@ const useFetch = () => {
 		}
 	};
 
-	const fetchRecipe = async (id) => {
+	const fetchRecipe = async id => {
 		try {
 			const res = await axios.get(
 				`${import.meta.env.VITE_API_URL}/${id}?type=public&app_id=${

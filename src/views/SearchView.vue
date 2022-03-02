@@ -1,25 +1,60 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import useFetch from '@/composables/useFetch';
 import RecipeItem from '@/components/RecipeItem.vue';
 
-const filterDiets = ref(false);
-
 const route = useRoute();
+
+const routeQueries = {
+	...route.query,
+};
 
 const { recipes, error, fetchRecipes } = useFetch();
 
-const routeQueries = route.query;
+const dietsDropdown = ref(false);
+const cuisineDropdown = ref(false);
 
-watch(
-	() => route.query.q,
-	async () => {
-		const res = await fetchRecipes(routeQueries);
-		console.log(res);
-	},
-	{ immediate: true }
-);
+const dietLabels = reactive({
+	balanced: false,
+	highFiber: false,
+	highProtein: false,
+	lowCarb: false,
+	lowFat: false,
+	lowSodium: false,
+});
+
+const cuisineTypes = reactive({
+	american: false,
+	asian: false,
+	chinese: false,
+	italian: false,
+	japanese: false,
+});
+
+const filterDiets = async () => {
+	dietsDropdown.value = false;
+
+	routeQueries.diets = [];
+	const labels = Object.keys(dietLabels);
+	labels.forEach(label => {
+		dietLabels[label] && routeQueries.diets.push(dietLabels[label]);
+	});
+	console.log(routeQueries);
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
+
+const filterCuisine = () => {};
+
+// watch(
+// 	() => route.query.q,
+// 	async () => {
+// 		const res = await fetchRecipes(routeQueries);
+// 		console.log(res);
+// 	},
+// 	{ immediate: true }
+// );
 </script>
 
 <template>
@@ -28,94 +63,169 @@ watch(
 			<div v-if="error">
 				<p>Error: {{ error.message }}</p>
 			</div>
-
-			<div v-else-if="recipes.hits">
+			<!-- v-else-if="recipes.hits" -->
+			<div v-if="true">
 				<header class="recipes-header">
 					<h2 class="h2">Results for "{{ routeQueries.q }}"</h2>
 					<div class="recipe-filtering">
-						<div
-							class="filter-dropdown"
-							@click="filterDiets = !filterDiets"
-						>
-							<div class="dropdown-header">
-								<span>Diets Label</span>
+						<!-- Diet Labels filter -->
+						<div class="filter-dropdown">
+							<div
+								class="dropdown-header"
+								@click="dietsDropdown = !dietsDropdown"
+							>
+								<span>Diet Labels</span>
 								<font-awesome-icon
 									icon="chevron-down"
 									class="icon-chevron"
-									:class="{ rotate: filterDiets === true }"
+									:class="{ rotate: dietsDropdown === true }"
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="filterDiets"
-								>
-									<form class="dropdown-form">
+								<div class="dropdown-content" v-show="dietsDropdown">
+									<form class="dropdown-form" @submit.prevent="filterDiets">
 										<div class="form-group">
 											<input
 												id="balanced"
 												type="checkbox"
+												v-model="dietLabels.balanced"
+												true-value="balanced"
 											/>
-											<label for="balanced"
-												>Balanced</label
-											>
+											<label for="balanced">Balanced</label>
 										</div>
 										<div class="form-group">
 											<input
 												id="high-fiber"
 												type="checkbox"
+												v-model="dietLabels.highFiber"
+												true-value="high-fiber"
 											/>
-											<label for="high-fiber"
-												>high-fiber</label
-											>
+											<label for="high-fiber">High Fiber</label>
 										</div>
 										<div class="form-group">
 											<input
 												id="high-protein"
 												type="checkbox"
+												v-model="dietLabels.highProtein"
+												true-value="high-protein"
 											/>
-											<label for="high-protein"
-												>high-protein</label
-											>
+											<label for="high-protein">High Protein</label>
 										</div>
 										<div class="form-group">
 											<input
 												id="low-carb"
 												type="checkbox"
+												v-model="dietLabels.lowCarb"
+												true-value="low-carb"
 											/>
-											<label for="low-carb"
-												>low-carb</label
-											>
+											<label for="low-carb">Low Carb</label>
 										</div>
 										<div class="form-group">
 											<input
 												id="low-fat"
 												type="checkbox"
+												v-model="dietLabels.lowFat"
+												true-value="low-fat"
 											/>
-											<label for="low-fat">low-fat</label>
+											<label for="low-fat">Low Fat</label>
 										</div>
 										<div class="form-group">
 											<input
 												id="low-sodium"
 												type="checkbox"
+												v-model="dietLabels.lowSodium"
+												true-value="low-sodium"
 											/>
-											<label for="low-sodium"
-												>low-sodium</label
-											>
+											<label for="low-sodium">Low Sodium</label>
+										</div>
+										<div class="form-group">
+											<button type="submit" class="btn dropdown-btn">
+												Apply
+											</button>
+										</div>
+									</form>
+								</div>
+							</Transition>
+						</div>
+
+						<!-- Cuisine type -->
+						<div class="filter-dropdown">
+							<div
+								class="dropdown-header"
+								@click="cuisineDropdown = !cuisineDropdown"
+							>
+								<span>Cuisine Type</span>
+								<font-awesome-icon
+									icon="chevron-down"
+									class="icon-chevron"
+									:class="{ rotate: cuisineDropdown === true }"
+								/>
+							</div>
+							<Transition name="dropdown">
+								<div class="dropdown-content" v-show="cuisineDropdown">
+									<form class="dropdown-form" @submit.prevent="filterCuisine">
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+												v-model="cuisineTypes.american"
+												true-value="American"
+											/>
+											<label for="balanced">American</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+												v-model="cuisineTypes.asian"
+												true-value="Asian"
+											/>
+											<label for="balanced">Asian</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+												v-model="cuisineTypes.chinese"
+												true-value="Chinese"
+											/>
+											<label for="balanced">Chinese</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+												v-model="cuisineTypes.italian"
+												true-value="Italian"
+											/>
+											<label for="balanced">Italian</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="balanced"
+												type="checkbox"
+												v-model="cuisineTypes.japanese"
+												true-value="Japanese"
+											/>
+											<label for="balanced">Japanese</label>
+										</div>
+										<div class="form-group">
+											<button type="submit" class="btn dropdown-btn">
+												Apply
+											</button>
 										</div>
 									</form>
 								</div>
 							</Transition>
 						</div>
 					</div>
-					<p class="subtitle">Found {{ recipes.count }} recipes</p>
+					<p class="subtitle">
+						Found {{ $filters.roundedNumber(recipes.count) }} recipes
+					</p>
 				</header>
 
 				<ul class="recipes-list">
-					<li
-						v-for="recipe in recipes.hits"
-						:key="recipe._links.self.href"
-					>
+					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -142,8 +252,12 @@ watch(
 		.recipe-filtering {
 			margin-bottom: 16px;
 			display: flex;
-			flex-wrap: wrap;
+			flex-direction: column;
 			gap: 24px;
+
+			@media screen and (min-width: 768px) {
+				flex-direction: row;
+			}
 
 			.filter-dropdown {
 				position: relative;
@@ -151,7 +265,6 @@ watch(
 				padding: 8px 16px;
 				border-radius: 9px;
 				border: 1px solid #ddd;
-				cursor: pointer;
 
 				&:hover {
 					box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -162,6 +275,7 @@ watch(
 					justify-content: space-between;
 					align-items: center;
 					gap: 16px;
+					cursor: pointer;
 
 					.icon-chevron {
 						font-size: 12px;
@@ -195,6 +309,12 @@ watch(
 						.form-group {
 							input[type='checkbox'] {
 								margin-right: 8px;
+								cursor: pointer;
+							}
+
+							.dropdown-btn {
+								padding: 8px 16px;
+								margin-top: 16px;
 							}
 						}
 					}
