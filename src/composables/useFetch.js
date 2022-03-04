@@ -12,9 +12,19 @@ const useFetch = () => {
 				import.meta.env.VITE_API_ID
 			}&app_key=${import.meta.env.VITE_API_KEY}&q=${queries.q}`;
 
-			if (queries.diets.length) {
+			// Diets filtering
+			if (queries.diets) {
 				queries.diets.forEach(dietLabel => (query += `&diet=${dietLabel}`));
 			}
+
+			// Cuisines type filtering
+			if (queries.cuisines) {
+				queries.cuisines.forEach(
+					cuisineType => (query += `&cuisineType=${cuisineType}`)
+				);
+			}
+
+			console.log(query);
 
 			const res = await axios.get(query);
 			recipes.value = res.data;

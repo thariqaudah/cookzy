@@ -47,7 +47,7 @@ const filterDiets = async () => {
 
 	routeQueries.diets = [];
 	const labels = Object.keys(dietLabels);
-	labels.forEach((label) => {
+	labels.forEach(label => {
 		dietLabels[label] && routeQueries.diets.push(dietLabels[label]);
 	});
 	console.log(routeQueries);
@@ -59,11 +59,45 @@ const filterCuisine = async () => {
 	cuisineDropdown.value = false;
 
 	routeQueries.cuisines = [];
-	const labels = Object.keys(cuisineTypes);
-	labels.forEach((label) => {
-		cuisineTypes[label] && routeQueries.cuisines.push(cuisineTypes[label]);
+	const types = Object.keys(cuisineTypes);
+	types.forEach(type => {
+		cuisineTypes[type] && routeQueries.cuisines.push(cuisineTypes[type]);
 	});
 	console.log(routeQueries);
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
+
+const removeDietFilter = async filter => {
+	const labels = Object.keys(dietLabels);
+	labels.forEach(label => {
+		// Remove from diet labels state
+		if (dietLabels[label] === filter) {
+			dietLabels[label] = false;
+		}
+
+		// Remove from queries
+		routeQueries.diets = routeQueries.diets.filter(
+			dietLabel => dietLabel !== filter
+		);
+	});
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
+
+const removeCuisineFilter = async filter => {
+	const types = Object.keys(cuisineTypes);
+	types.forEach(type => {
+		// Remove from diet labels state
+		if (cuisineTypes[type] === filter) {
+			cuisineTypes[type] = false;
+		}
+
+		// Remove from queries
+		routeQueries.cuisines = routeQueries.cuisines.filter(
+			cuisineType => cuisineType !== filter
+		);
+	});
 	const res = await fetchRecipes(routeQueries);
 	console.log(res);
 };
@@ -90,11 +124,13 @@ const filterCuisine = async () => {
 					<h2 class="h2">Results for "{{ routeQueries.q }}"</h2>
 					<div class="recipe-filtering">
 						<!-- Diet Labels filter -->
-						<div class="filter-dropdown">
-							<div
-								class="dropdown-header"
-								@click="openDietsDropdown"
-							>
+						<div
+							class="filter-dropdown"
+							:class="{
+								active: routeQueries.diets && routeQueries.diets.length > 0,
+							}"
+						>
+							<div class="dropdown-header" @click="openDietsDropdown">
 								<span>Diet Labels</span>
 								<font-awesome-icon
 									icon="chevron-down"
@@ -103,14 +139,8 @@ const filterCuisine = async () => {
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="dietsDropdown"
-								>
-									<form
-										class="dropdown-form"
-										@submit.prevent="filterDiets"
-									>
+								<div class="dropdown-content" v-show="dietsDropdown">
+									<form class="dropdown-form" @submit.prevent="filterDiets">
 										<div class="form-group">
 											<input
 												id="balanced"
@@ -118,9 +148,7 @@ const filterCuisine = async () => {
 												v-model="dietLabels.balanced"
 												true-value="balanced"
 											/>
-											<label for="balanced"
-												>Balanced</label
-											>
+											<label for="balanced">Balanced</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -129,9 +157,7 @@ const filterCuisine = async () => {
 												v-model="dietLabels.highFiber"
 												true-value="high-fiber"
 											/>
-											<label for="high-fiber"
-												>High Fiber</label
-											>
+											<label for="high-fiber">High Fiber</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -140,9 +166,7 @@ const filterCuisine = async () => {
 												v-model="dietLabels.highProtein"
 												true-value="high-protein"
 											/>
-											<label for="high-protein"
-												>High Protein</label
-											>
+											<label for="high-protein">High Protein</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -151,9 +175,7 @@ const filterCuisine = async () => {
 												v-model="dietLabels.lowCarb"
 												true-value="low-carb"
 											/>
-											<label for="low-carb"
-												>Low Carb</label
-											>
+											<label for="low-carb">Low Carb</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -171,15 +193,10 @@ const filterCuisine = async () => {
 												v-model="dietLabels.lowSodium"
 												true-value="low-sodium"
 											/>
-											<label for="low-sodium"
-												>Low Sodium</label
-											>
+											<label for="low-sodium">Low Sodium</label>
 										</div>
 										<div class="form-group">
-											<button
-												type="submit"
-												class="btn dropdown-btn"
-											>
+											<button type="submit" class="btn dropdown-btn">
 												Apply
 											</button>
 										</div>
@@ -189,11 +206,14 @@ const filterCuisine = async () => {
 						</div>
 
 						<!-- Cuisine type -->
-						<div class="filter-dropdown">
-							<div
-								class="dropdown-header"
-								@click="openCuisineDropdown"
-							>
+						<div
+							class="filter-dropdown"
+							:class="{
+								active:
+									routeQueries.cuisines && routeQueries.cuisines.length > 0,
+							}"
+						>
+							<div class="dropdown-header" @click="openCuisineDropdown">
 								<span>Cuisine Type</span>
 								<font-awesome-icon
 									icon="chevron-down"
@@ -204,72 +224,62 @@ const filterCuisine = async () => {
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="cuisineDropdown"
-								>
-									<form
-										class="dropdown-form"
-										@submit.prevent="filterCuisine"
-									>
+								<div class="dropdown-content" v-show="cuisineDropdown">
+									<form class="dropdown-form" @submit.prevent="filterCuisine">
 										<div class="form-group">
 											<input
-												id="balanced"
+												id="american"
 												type="checkbox"
 												v-model="cuisineTypes.american"
 												true-value="American"
 											/>
-											<label for="balanced"
-												>American</label
-											>
+											<label for="american">American</label>
 										</div>
 										<div class="form-group">
 											<input
-												id="balanced"
+												id="asian"
 												type="checkbox"
 												v-model="cuisineTypes.asian"
 												true-value="Asian"
 											/>
-											<label for="balanced">Asian</label>
+											<label for="asian">Asian</label>
 										</div>
 										<div class="form-group">
 											<input
-												id="balanced"
+												id="chinese"
 												type="checkbox"
 												v-model="cuisineTypes.chinese"
 												true-value="Chinese"
 											/>
-											<label for="balanced"
-												>Chinese</label
-											>
+											<label for="chinese">Chinese</label>
 										</div>
 										<div class="form-group">
 											<input
-												id="balanced"
+												id="italian"
 												type="checkbox"
 												v-model="cuisineTypes.italian"
 												true-value="Italian"
 											/>
-											<label for="balanced"
-												>Italian</label
-											>
+											<label for="italian">Italian</label>
 										</div>
 										<div class="form-group">
 											<input
-												id="balanced"
+												id="japanse"
 												type="checkbox"
 												v-model="cuisineTypes.japanese"
 												true-value="Japanese"
 											/>
-											<label for="balanced"
-												>Japanese</label
-											>
+											<label for="japanse">Japanese</label>
 										</div>
-										<div class="form-group">
+										<div class="form-button">
 											<button
-												type="submit"
-												class="btn dropdown-btn"
+												type="button"
+												class="btn btn-secondary"
+												@click="cuisineDropdown = false"
 											>
+												Cancel
+											</button>
+											<button type="submit" class="btn dropdown-btn">
 												Apply
 											</button>
 										</div>
@@ -278,6 +288,38 @@ const filterCuisine = async () => {
 							</Transition>
 						</div>
 					</div>
+
+					<!-- Filters label -->
+					<div
+						class="filters-label"
+						v-if="routeQueries.diets || routeQueries.cuisines"
+					>
+						<span
+							class="label"
+							v-for="query in routeQueries.diets"
+							:key="query"
+						>
+							{{ query }}
+							<font-awesome-icon
+								icon="xmark"
+								class="icon-clear"
+								@click="removeDietFilter(query)"
+							/>
+						</span>
+						<span
+							class="label"
+							v-for="query in routeQueries.cuisines"
+							:key="query"
+						>
+							{{ query }}
+							<font-awesome-icon
+								icon="xmark"
+								class="icon-clear"
+								@click="removeCuisineFilter(query)"
+							/>
+						</span>
+					</div>
+
 					<p class="subtitle">
 						Found
 						{{ $filters.roundedNumber(recipes.count) }} recipes
@@ -285,10 +327,7 @@ const filterCuisine = async () => {
 				</header>
 
 				<ul class="recipes-list">
-					<li
-						v-for="recipe in recipes.hits"
-						:key="recipe._links.self.href"
-					>
+					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -316,7 +355,7 @@ const filterCuisine = async () => {
 			margin-bottom: 16px;
 			display: flex;
 			flex-direction: column;
-			gap: 24px;
+			gap: 16px;
 
 			@media screen and (min-width: 768px) {
 				flex-direction: row;
@@ -331,6 +370,10 @@ const filterCuisine = async () => {
 
 				&:hover {
 					box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+				}
+
+				&.active {
+					border: 1px solid var(--primary-color);
 				}
 
 				.dropdown-header {
@@ -374,15 +417,48 @@ const filterCuisine = async () => {
 								margin-right: 8px;
 								cursor: pointer;
 							}
+						}
 
-							.dropdown-btn {
-								padding: 8px 16px;
-								margin-top: 16px;
-							}
+						.form-button {
+							display: flex;
+							gap: 8px;
+							margin-top: 16px;
 						}
 					}
 				}
 			}
+		}
+
+		.filters-label {
+			margin-bottom: 24px;
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+
+			.label {
+				display: inline-block;
+				background-color: #e0e0e0;
+				font-size: 14px;
+				font-weight: 500;
+				padding: 6px 12px;
+				border-radius: 1000px;
+
+				.icon-clear {
+					font-size: 12px;
+					font-weight: 400;
+					margin-left: 4px;
+					color: #666;
+					cursor: pointer;
+
+					&:hover {
+						color: var(--dark-grey);
+					}
+				}
+			}
+		}
+
+		.subtitle {
+			font-weight: 500;
 		}
 	}
 

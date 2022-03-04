@@ -23,15 +23,13 @@ const searchRecipes = () => {
 			<div class="home-text-box">
 				<h1 class="h1">What do you want to cook?</h1>
 				<p class="text-description">
-					You can find any food recipe here. Set some options that
-					match your preference. Then, you can bookmark your favorite
-					food recipe with single click. Let's cook!
+					You can find any food recipe here. Set some options that match your
+					preference. Then, you can bookmark your favorite food recipe with
+					single click. Let's cook!
 				</p>
 				<div class="form-container">
 					<form class="search-form" @submit.prevent="searchRecipes">
-						<label class="form-header" for="recipe"
-							>Find favorite recipe</label
-						>
+						<label class="form-header" for="recipe">Find favorite recipe</label>
 						<div class="form-group">
 							<input
 								id="recipe"
@@ -162,10 +160,6 @@ const searchRecipes = () => {
 		.home-img {
 			width: 50%;
 			margin: 0 auto 24px;
-
-			@media screen and (min-width: 992px) {
-				width: 75%;
-			}
 
 			@media screen and (min-width: 1200px) {
 				width: 100%;
