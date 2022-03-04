@@ -32,12 +32,22 @@ const cuisineTypes = reactive({
 	japanese: false,
 });
 
+const openDietsDropdown = () => {
+	cuisineDropdown.value = false;
+	dietsDropdown.value = !dietsDropdown.value;
+};
+
+const openCuisineDropdown = () => {
+	dietsDropdown.value = false;
+	cuisineDropdown.value = !cuisineDropdown.value;
+};
+
 const filterDiets = async () => {
 	dietsDropdown.value = false;
 
 	routeQueries.diets = [];
 	const labels = Object.keys(dietLabels);
-	labels.forEach(label => {
+	labels.forEach((label) => {
 		dietLabels[label] && routeQueries.diets.push(dietLabels[label]);
 	});
 	console.log(routeQueries);
@@ -45,7 +55,18 @@ const filterDiets = async () => {
 	console.log(res);
 };
 
-const filterCuisine = () => {};
+const filterCuisine = async () => {
+	cuisineDropdown.value = false;
+
+	routeQueries.cuisines = [];
+	const labels = Object.keys(cuisineTypes);
+	labels.forEach((label) => {
+		cuisineTypes[label] && routeQueries.cuisines.push(cuisineTypes[label]);
+	});
+	console.log(routeQueries);
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
 
 // watch(
 // 	() => route.query.q,
@@ -72,7 +93,7 @@ const filterCuisine = () => {};
 						<div class="filter-dropdown">
 							<div
 								class="dropdown-header"
-								@click="dietsDropdown = !dietsDropdown"
+								@click="openDietsDropdown"
 							>
 								<span>Diet Labels</span>
 								<font-awesome-icon
@@ -82,8 +103,14 @@ const filterCuisine = () => {};
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div class="dropdown-content" v-show="dietsDropdown">
-									<form class="dropdown-form" @submit.prevent="filterDiets">
+								<div
+									class="dropdown-content"
+									v-show="dietsDropdown"
+								>
+									<form
+										class="dropdown-form"
+										@submit.prevent="filterDiets"
+									>
 										<div class="form-group">
 											<input
 												id="balanced"
@@ -91,7 +118,9 @@ const filterCuisine = () => {};
 												v-model="dietLabels.balanced"
 												true-value="balanced"
 											/>
-											<label for="balanced">Balanced</label>
+											<label for="balanced"
+												>Balanced</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -100,7 +129,9 @@ const filterCuisine = () => {};
 												v-model="dietLabels.highFiber"
 												true-value="high-fiber"
 											/>
-											<label for="high-fiber">High Fiber</label>
+											<label for="high-fiber"
+												>High Fiber</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -109,7 +140,9 @@ const filterCuisine = () => {};
 												v-model="dietLabels.highProtein"
 												true-value="high-protein"
 											/>
-											<label for="high-protein">High Protein</label>
+											<label for="high-protein"
+												>High Protein</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -118,7 +151,9 @@ const filterCuisine = () => {};
 												v-model="dietLabels.lowCarb"
 												true-value="low-carb"
 											/>
-											<label for="low-carb">Low Carb</label>
+											<label for="low-carb"
+												>Low Carb</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -136,10 +171,15 @@ const filterCuisine = () => {};
 												v-model="dietLabels.lowSodium"
 												true-value="low-sodium"
 											/>
-											<label for="low-sodium">Low Sodium</label>
+											<label for="low-sodium"
+												>Low Sodium</label
+											>
 										</div>
 										<div class="form-group">
-											<button type="submit" class="btn dropdown-btn">
+											<button
+												type="submit"
+												class="btn dropdown-btn"
+											>
 												Apply
 											</button>
 										</div>
@@ -152,18 +192,26 @@ const filterCuisine = () => {};
 						<div class="filter-dropdown">
 							<div
 								class="dropdown-header"
-								@click="cuisineDropdown = !cuisineDropdown"
+								@click="openCuisineDropdown"
 							>
 								<span>Cuisine Type</span>
 								<font-awesome-icon
 									icon="chevron-down"
 									class="icon-chevron"
-									:class="{ rotate: cuisineDropdown === true }"
+									:class="{
+										rotate: cuisineDropdown === true,
+									}"
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div class="dropdown-content" v-show="cuisineDropdown">
-									<form class="dropdown-form" @submit.prevent="filterCuisine">
+								<div
+									class="dropdown-content"
+									v-show="cuisineDropdown"
+								>
+									<form
+										class="dropdown-form"
+										@submit.prevent="filterCuisine"
+									>
 										<div class="form-group">
 											<input
 												id="balanced"
@@ -171,7 +219,9 @@ const filterCuisine = () => {};
 												v-model="cuisineTypes.american"
 												true-value="American"
 											/>
-											<label for="balanced">American</label>
+											<label for="balanced"
+												>American</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -189,7 +239,9 @@ const filterCuisine = () => {};
 												v-model="cuisineTypes.chinese"
 												true-value="Chinese"
 											/>
-											<label for="balanced">Chinese</label>
+											<label for="balanced"
+												>Chinese</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -198,7 +250,9 @@ const filterCuisine = () => {};
 												v-model="cuisineTypes.italian"
 												true-value="Italian"
 											/>
-											<label for="balanced">Italian</label>
+											<label for="balanced"
+												>Italian</label
+											>
 										</div>
 										<div class="form-group">
 											<input
@@ -207,10 +261,15 @@ const filterCuisine = () => {};
 												v-model="cuisineTypes.japanese"
 												true-value="Japanese"
 											/>
-											<label for="balanced">Japanese</label>
+											<label for="balanced"
+												>Japanese</label
+											>
 										</div>
 										<div class="form-group">
-											<button type="submit" class="btn dropdown-btn">
+											<button
+												type="submit"
+												class="btn dropdown-btn"
+											>
 												Apply
 											</button>
 										</div>
@@ -220,12 +279,16 @@ const filterCuisine = () => {};
 						</div>
 					</div>
 					<p class="subtitle">
-						Found {{ $filters.roundedNumber(recipes.count) }} recipes
+						Found
+						{{ $filters.roundedNumber(recipes.count) }} recipes
 					</p>
 				</header>
 
 				<ul class="recipes-list">
-					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
+					<li
+						v-for="recipe in recipes.hits"
+						:key="recipe._links.self.href"
+					>
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>

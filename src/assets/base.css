@@ -63,9 +63,13 @@ a {
 	padding: 16px 32px;
 	background-color: var(--dark-grey);
 	color: #fff;
-	font-weight: 500;
+	font-weight: 700;
 	border-radius: 5px;
 	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: var(--light-grey);
 }
 
 /*  MEDIA QUERIES */

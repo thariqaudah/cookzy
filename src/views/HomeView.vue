@@ -39,9 +39,7 @@ const searchRecipes = () => {
 								placeholder="Type something..."
 								v-model="searchKeyword"
 							/>
-							<button type="submit" class="btn search-btn">
-								Search!
-							</button>
+							<button type="submit" class="btn">Search!</button>
 						</div>
 					</form>
 				</div>
@@ -112,12 +110,16 @@ const searchRecipes = () => {
 
 				.form-group {
 					display: flex;
-					justify-content: center;
+					flex-direction: column;
 					gap: 8px;
+
+					@media screen and (min-width: 768px) {
+						flex-direction: row;
+						justify-content: center;
+					}
 				}
 
-				input[type='text'],
-				.search-btn {
+				input[type='text'] {
 					display: inline-block;
 					border: none;
 					outline: none;

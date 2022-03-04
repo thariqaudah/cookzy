@@ -12,9 +12,16 @@
 
 <style lang="scss" scoped>
 .footer {
-	padding: 112px 0 32px;
+	padding: 96px 0 32px;
 	text-align: center;
-	color: #999;
+
+	p {
+		color: #999;
+
+		&:hover {
+			color: #666;
+		}
+	}
 
 	.footer-icon {
 		color: #e94646;
