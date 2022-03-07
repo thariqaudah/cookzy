@@ -126,11 +126,15 @@ const searchRecipes = () => {
 				}
 
 				input[type='text'] {
-					padding: 16px 18px;
+					padding: 16px 18px 16px 48px;
 					width: 100%;
 					background-color: #fff;
 					border: 1px solid #ddd;
 					border-radius: 9px;
+					background-image: url('../assets/icon-search.svg');
+					background-repeat: no-repeat;
+					background-position: left;
+					background-position: 16px;
 
 					&::placeholder {
 						color: #999;
@@ -139,16 +143,6 @@ const searchRecipes = () => {
 					&:focus {
 						color: var(--medium-grey);
 					}
-				}
-
-				.search-btn {
-					display: inline-block;
-					padding: 16px 32px;
-					background-color: var(--dark-grey);
-					color: #fff;
-					font-weight: 500;
-					border-radius: 5px;
-					cursor: pointer;
 				}
 			}
 		}

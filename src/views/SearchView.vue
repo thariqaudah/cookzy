@@ -10,10 +10,11 @@ const routeQueries = {
 	...route.query,
 };
 
-const { recipes, error, fetchRecipes } = useFetch();
+const { recipes, error, loading, fetchRecipes, nextRecipes } = useFetch();
 
 const dietsDropdown = ref(false);
 const cuisineDropdown = ref(false);
+const mealDropdown = ref(false);
 
 const dietLabels = reactive({
 	balanced: false,
@@ -32,14 +33,30 @@ const cuisineTypes = reactive({
 	japanese: false,
 });
 
+const mealTypes = reactive({
+	breakfast: false,
+	dinner: false,
+	lunch: false,
+	snack: false,
+	teatime: false,
+});
+
 const openDietsDropdown = () => {
 	cuisineDropdown.value = false;
+	mealDropdown.value = false;
 	dietsDropdown.value = !dietsDropdown.value;
 };
 
 const openCuisineDropdown = () => {
 	dietsDropdown.value = false;
+	mealDropdown.value = false;
 	cuisineDropdown.value = !cuisineDropdown.value;
+};
+
+const openMealDropdown = () => {
+	dietsDropdown.value = false;
+	cuisineDropdown.value = false;
+	mealDropdown.value = !mealDropdown.value;
 };
 
 const filterDiets = async () => {
@@ -62,6 +79,19 @@ const filterCuisine = async () => {
 	const types = Object.keys(cuisineTypes);
 	types.forEach(type => {
 		cuisineTypes[type] && routeQueries.cuisines.push(cuisineTypes[type]);
+	});
+	console.log(routeQueries);
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
+
+const filterMeal = async () => {
+	mealDropdown.value = false;
+
+	routeQueries.meals = [];
+	const types = Object.keys(mealTypes);
+	types.forEach(type => {
+		mealTypes[type] && routeQueries.meals.push(mealTypes[type]);
 	});
 	console.log(routeQueries);
 	const res = await fetchRecipes(routeQueries);
@@ -102,14 +132,38 @@ const removeCuisineFilter = async filter => {
 	console.log(res);
 };
 
-// watch(
-// 	() => route.query.q,
-// 	async () => {
-// 		const res = await fetchRecipes(routeQueries);
-// 		console.log(res);
-// 	},
-// 	{ immediate: true }
-// );
+const removeMealFilter = async filter => {
+	const types = Object.keys(mealTypes);
+	types.forEach(type => {
+		// Remove from diet labels state
+		if (mealTypes[type] === filter) {
+			mealTypes[type] = false;
+		}
+
+		// Remove from queries
+		routeQueries.meals = routeQueries.meals.filter(
+			mealType => mealType !== filter
+		);
+	});
+	const res = await fetchRecipes(routeQueries);
+	console.log(res);
+};
+
+// Pagination
+const loadMoreRecipes = async link => {
+	console.log(link);
+	const res = await nextRecipes(link);
+	console.log(res);
+};
+
+watch(
+	() => route.query.q,
+	async () => {
+		const res = await fetchRecipes(routeQueries);
+		console.log(res);
+	},
+	{ immediate: true }
+);
 </script>
 
 <template>
@@ -118,8 +172,8 @@ const removeCuisineFilter = async filter => {
 			<div v-if="error">
 				<p>Error: {{ error.message }}</p>
 			</div>
-			<!-- v-else-if="recipes.hits" -->
-			<div v-if="true">
+
+			<div v-else-if="recipes.hits">
 				<header class="recipes-header">
 					<h2 class="h2">Results for "{{ routeQueries.q }}"</h2>
 					<div class="recipe-filtering">
@@ -195,9 +249,14 @@ const removeCuisineFilter = async filter => {
 											/>
 											<label for="low-sodium">Low Sodium</label>
 										</div>
-										<div class="form-group">
-											<button type="submit" class="btn dropdown-btn">
-												Apply
+										<div class="form-button">
+											<button type="submit" class="btn btn-sm">Apply</button>
+											<button
+												type="button"
+												class="btn btn-outline btn-sm"
+												@click="dietsDropdown = false"
+											>
+												Cancel
 											</button>
 										</div>
 									</form>
@@ -272,15 +331,93 @@ const removeCuisineFilter = async filter => {
 											<label for="japanse">Japanese</label>
 										</div>
 										<div class="form-button">
+											<button type="submit" class="btn btn-sm">Apply</button>
 											<button
 												type="button"
-												class="btn btn-secondary"
+												class="btn btn-outline btn-sm"
 												@click="cuisineDropdown = false"
 											>
 												Cancel
 											</button>
-											<button type="submit" class="btn dropdown-btn">
-												Apply
+										</div>
+									</form>
+								</div>
+							</Transition>
+						</div>
+
+						<!-- Meal type -->
+						<div
+							class="filter-dropdown"
+							:class="{
+								active: routeQueries.meals && routeQueries.meals.length > 0,
+							}"
+						>
+							<div class="dropdown-header" @click="openMealDropdown">
+								<span>Meal Type</span>
+								<font-awesome-icon
+									icon="chevron-down"
+									class="icon-chevron"
+									:class="{
+										rotate: mealDropdown === true,
+									}"
+								/>
+							</div>
+							<Transition name="dropdown">
+								<div class="dropdown-content" v-show="mealDropdown">
+									<form class="dropdown-form" @submit.prevent="filterMeal">
+										<div class="form-group">
+											<input
+												id="breakfast"
+												type="checkbox"
+												v-model="mealTypes.breakfast"
+												true-value="Breakfast"
+											/>
+											<label for="breakfast">Breakfast</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="dinner"
+												type="checkbox"
+												v-model="mealTypes.dinner"
+												true-value="Dinner"
+											/>
+											<label for="dinner">Dinner</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="lunch"
+												type="checkbox"
+												v-model="mealTypes.lunch"
+												true-value="Lunch"
+											/>
+											<label for="lunch">Lunch</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="snack"
+												type="checkbox"
+												v-model="mealTypes.snack"
+												true-value="Snack"
+											/>
+											<label for="snack">Snack</label>
+										</div>
+										<div class="form-group">
+											<input
+												id="teatime"
+												type="checkbox"
+												v-model="mealTypes.teatime"
+												true-value="Teatime"
+											/>
+											<label for="teatime">Teatime</label>
+										</div>
+										<div class="form-button">
+											<button type="submit" class="btn btn-sm">Apply</button>
+											<button
+												type="button"
+												class="btn btn-outline btn-sm"
+												@click="mealDropdown = false"
+											>
+												Cancel
 											</button>
 										</div>
 									</form>
@@ -292,7 +429,9 @@ const removeCuisineFilter = async filter => {
 					<!-- Filters label -->
 					<div
 						class="filters-label"
-						v-if="routeQueries.diets || routeQueries.cuisines"
+						v-if="
+							routeQueries.diets || routeQueries.cuisines || routeQueries.meals
+						"
 					>
 						<span
 							class="label"
@@ -318,12 +457,27 @@ const removeCuisineFilter = async filter => {
 								@click="removeCuisineFilter(query)"
 							/>
 						</span>
+						<span
+							class="label"
+							v-for="query in routeQueries.meals"
+							:key="query"
+						>
+							{{ query }}
+							<font-awesome-icon
+								icon="xmark"
+								class="icon-clear"
+								@click="removeMealFilter(query)"
+							/>
+						</span>
 					</div>
 
-					<p class="subtitle">
-						Found
-						{{ $filters.roundedNumber(recipes.count) }} recipes
-					</p>
+					<div class="subtitle">
+						<p v-if="!loading">
+							Found
+							{{ $filters.roundedNumber(recipes.count) }} recipes
+						</p>
+						<p v-else>Filtering recipes...</p>
+					</div>
 				</header>
 
 				<ul class="recipes-list">
@@ -331,6 +485,19 @@ const removeCuisineFilter = async filter => {
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
+
+				<div class="pagination" v-if="recipes._links.next">
+					<button
+						class="btn btn-primary"
+						@click="loadMoreRecipes(recipes._links.next.href)"
+						v-if="!loading"
+					>
+						Load more
+					</button>
+					<button type="button" disabled class="btn btn-mute" v-else>
+						Loading...
+					</button>
+				</div>
 			</div>
 
 			<div v-else>
@@ -430,10 +597,10 @@ const removeCuisineFilter = async filter => {
 		}
 
 		.filters-label {
-			margin-bottom: 24px;
 			display: flex;
 			gap: 8px;
 			flex-wrap: wrap;
+			margin-bottom: 16px;
 
 			.label {
 				display: inline-block;
@@ -457,7 +624,7 @@ const removeCuisineFilter = async filter => {
 			}
 		}
 
-		.subtitle {
+		.subtitle p {
 			font-weight: 500;
 		}
 	}
@@ -478,6 +645,11 @@ const removeCuisineFilter = async filter => {
 		@media screen and (min-width: 992px) {
 			grid-template-columns: repeat(3, 1fr);
 		}
+	}
+
+	.pagination {
+		margin-top: 48px;
+		text-align: center;
 	}
 
 	// Transition class

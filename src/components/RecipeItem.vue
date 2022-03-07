@@ -40,10 +40,10 @@ const saveRecipe = () => {
 		</div>
 		<div class="item-body">
 			<div class="tags">
-				<span class="tag tag-primary">{{
+				<span class="tag tag-primary" v-if="props.recipe.recipe.dishType">{{
 					$filters.capitalizeString(props.recipe.recipe.dishType[0])
 				}}</span>
-				<span class="tag tag-outline">{{
+				<span class="tag tag-outline" v-if="props.recipe.recipe.cuisineType">{{
 					$filters.capitalizeString(props.recipe.recipe.cuisineType[0])
 				}}</span>
 			</div>
