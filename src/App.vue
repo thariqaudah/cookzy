@@ -1,6 +1,32 @@
 <script setup>
+import { onMounted, provide, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import Navbar from '@/components/Navbar.vue';
+
+const savedRecipes = ref([]);
+
+const savingRecipe = (recipeId) => {
+	savedRecipes.value.unshift({
+		id: recipeId,
+	});
+	console.log(savedRecipes.value);
+
+	window.localStorage.setItem(
+		'savedRecipes',
+		JSON.stringify(savedRecipes.value)
+	);
+};
+
+onMounted(() => {
+	const res = JSON.parse(window.localStorage.getItem('savedRecipes'));
+	if (res) {
+		savedRecipes.value = [...res];
+	}
+	console.log(savedRecipes.value);
+});
+
+provide('savedRecipes', savedRecipes);
+provide('savingRecipe', savingRecipe);
 </script>
 
 <template>

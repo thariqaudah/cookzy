@@ -54,6 +54,12 @@ watch(
 						:src="recipe.recipe.images.REGULAR.url"
 						:alt="recipe.recipe.label"
 					/>
+					<p class="recipe-source">
+						Source: 
+						<a :href="recipe.recipe.source" class="source-link">
+						{{ recipe.recipe.source }}
+						</a>
+					</p>
 				</div>
 				<!-- RECIPE TEXT -->
 				<div class="recipe-text-box">
@@ -191,6 +197,7 @@ watch(
 						</li>
 					</ul>
 				</div>
+
 				<button class="btn btn-back" @click="router.back()">
 					<span>Explore more recipes</span>
 					<font-awesome-icon icon="arrow-right" />
@@ -223,6 +230,20 @@ watch(
 				height: 400px;
 				object-fit: cover;
 				border-radius: 11px;
+			}
+
+			.recipe-source {
+				margin-top: 16px;
+				font-size: 14px;
+				color: #777;
+
+				.source-link {
+					font-style: italic;
+
+					&:hover {
+						color: var(--light-grey);
+					}
+				}
 			}
 		}
 
