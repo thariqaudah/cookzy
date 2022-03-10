@@ -19,7 +19,7 @@ import IconLove from '@/components/icons/IconLove.vue';
 					</RouterLink>
 				</li>
 				<li class="nav-item">
-					<RouterLink class="nav-link" to="/about">
+					<RouterLink class="nav-link" :to="{ name: 'favorite' }">
 						<IconLove />
 						<span>Favorite</span>
 					</RouterLink>

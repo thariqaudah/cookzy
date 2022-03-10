@@ -2,14 +2,14 @@
 	<footer class="footer">
 		<div class="container">
 			<p class="footer-text">
-				Built with
+				Built and designed with
 				<font-awesome-icon class="footer-icon" icon="heart" />
 				by
 				<a
 					class="footer-link"
 					href="https://github.com/thariqaudah"
 					target="_blink"
-					>Thariq 'Audah</a
+					>Thariq Audah</a
 				>
 			</p>
 		</div>

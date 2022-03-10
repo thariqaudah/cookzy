@@ -5,11 +5,19 @@ import Navbar from '@/components/Navbar.vue';
 
 const savedRecipes = ref([]);
 
-const savingRecipe = (recipeId) => {
-	savedRecipes.value.unshift({
-		id: recipeId,
-	});
-	console.log(savedRecipes.value);
+const savingRecipe = recipe => {
+	savedRecipes.value.unshift(recipe);
+
+	window.localStorage.setItem(
+		'savedRecipes',
+		JSON.stringify(savedRecipes.value)
+	);
+};
+
+const removeRecipe = recipeId => {
+	savedRecipes.value = savedRecipes.value.filter(
+		recipe => recipe.recipe.id !== recipeId
+	);
 
 	window.localStorage.setItem(
 		'savedRecipes',
@@ -22,11 +30,11 @@ onMounted(() => {
 	if (res) {
 		savedRecipes.value = [...res];
 	}
-	console.log(savedRecipes.value);
 });
 
 provide('savedRecipes', savedRecipes);
 provide('savingRecipe', savingRecipe);
+provide('removeRecipe', removeRecipe);
 </script>
 
 <template>
