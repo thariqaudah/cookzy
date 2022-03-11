@@ -56,7 +56,7 @@ watch(
 					/>
 					<p class="recipe-source">
 						Source: 
-						<a :href="recipe.recipe.source" class="source-link">
+						<a :href="recipe.recipe.url" class="source-link" target="_blank">
 						{{ recipe.recipe.source }}
 						</a>
 					</p>

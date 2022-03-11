@@ -50,6 +50,24 @@ provide('removeRecipe', removeRecipe);
 <style lang="scss">
 @import '@/assets/base.css';
 
+.recipes-list {
+	padding: 32px 0;
+	list-style: none;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 32px;
+
+	@media screen and (min-width: 768px) {
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: 32px;
+		row-gap: 48px;
+	}
+
+	@media screen and (min-width: 992px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
 .tags {
 	display: flex;
 	flex-wrap: wrap;

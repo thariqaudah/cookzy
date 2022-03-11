@@ -67,7 +67,7 @@ const filterDiets = async () => {
 
 	routeQueries.diets = [];
 	const labels = Object.keys(dietLabels);
-	labels.forEach((label) => {
+	labels.forEach(label => {
 		dietLabels[label] && routeQueries.diets.push(dietLabels[label]);
 	});
 	console.log(routeQueries);
@@ -80,7 +80,7 @@ const filterCuisine = async () => {
 
 	routeQueries.cuisines = [];
 	const types = Object.keys(cuisineTypes);
-	types.forEach((type) => {
+	types.forEach(type => {
 		cuisineTypes[type] && routeQueries.cuisines.push(cuisineTypes[type]);
 	});
 	console.log(routeQueries);
@@ -93,7 +93,7 @@ const filterMeal = async () => {
 
 	routeQueries.meals = [];
 	const types = Object.keys(mealTypes);
-	types.forEach((type) => {
+	types.forEach(type => {
 		mealTypes[type] && routeQueries.meals.push(mealTypes[type]);
 	});
 	console.log(routeQueries);
@@ -101,9 +101,9 @@ const filterMeal = async () => {
 	console.log(res);
 };
 
-const removeDietFilter = async (filter) => {
+const removeDietFilter = async filter => {
 	const labels = Object.keys(dietLabels);
-	labels.forEach((label) => {
+	labels.forEach(label => {
 		// Remove from diet labels state
 		if (dietLabels[label] === filter) {
 			dietLabels[label] = false;
@@ -111,16 +111,16 @@ const removeDietFilter = async (filter) => {
 
 		// Remove from queries
 		routeQueries.diets = routeQueries.diets.filter(
-			(dietLabel) => dietLabel !== filter
+			dietLabel => dietLabel !== filter
 		);
 	});
 	const res = await fetchRecipes(routeQueries);
 	console.log(res);
 };
 
-const removeCuisineFilter = async (filter) => {
+const removeCuisineFilter = async filter => {
 	const types = Object.keys(cuisineTypes);
-	types.forEach((type) => {
+	types.forEach(type => {
 		// Remove from diet labels state
 		if (cuisineTypes[type] === filter) {
 			cuisineTypes[type] = false;
@@ -128,16 +128,16 @@ const removeCuisineFilter = async (filter) => {
 
 		// Remove from queries
 		routeQueries.cuisines = routeQueries.cuisines.filter(
-			(cuisineType) => cuisineType !== filter
+			cuisineType => cuisineType !== filter
 		);
 	});
 	const res = await fetchRecipes(routeQueries);
 	console.log(res);
 };
 
-const removeMealFilter = async (filter) => {
+const removeMealFilter = async filter => {
 	const types = Object.keys(mealTypes);
-	types.forEach((type) => {
+	types.forEach(type => {
 		// Remove from diet labels state
 		if (mealTypes[type] === filter) {
 			mealTypes[type] = false;
@@ -145,7 +145,7 @@ const removeMealFilter = async (filter) => {
 
 		// Remove from queries
 		routeQueries.meals = routeQueries.meals.filter(
-			(mealType) => mealType !== filter
+			mealType => mealType !== filter
 		);
 	});
 	const res = await fetchRecipes(routeQueries);
@@ -182,7 +182,7 @@ const searchRecipes = async () => {
 };
 
 // Pagination
-const loadMoreRecipes = async (link) => {
+const loadMoreRecipes = async link => {
 	await nextRecipes(link);
 };
 
@@ -211,15 +211,10 @@ watch(
 						<div
 							class="filter-dropdown"
 							:class="{
-								active:
-									routeQueries.diets &&
-									routeQueries.diets.length > 0,
+								active: routeQueries.diets && routeQueries.diets.length > 0,
 							}"
 						>
-							<div
-								class="dropdown-header"
-								@click="openDietsDropdown"
-							>
+							<div class="dropdown-header" @click="openDietsDropdown">
 								<span>Diet Labels</span>
 								<font-awesome-icon
 									icon="chevron-down"
@@ -228,14 +223,8 @@ watch(
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="dietsDropdown"
-								>
-									<form
-										class="dropdown-form"
-										@submit.prevent="filterDiets"
-									>
+								<div class="dropdown-content" v-show="dietsDropdown">
+									<form class="dropdown-form" @submit.prevent="filterDiets">
 										<div class="form-group">
 											<input
 												id="balanced"
@@ -243,9 +232,7 @@ watch(
 												v-model="dietLabels.balanced"
 												true-value="balanced"
 											/>
-											<label for="balanced"
-												>Balanced</label
-											>
+											<label for="balanced">Balanced</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -254,9 +241,7 @@ watch(
 												v-model="dietLabels.highFiber"
 												true-value="high-fiber"
 											/>
-											<label for="high-fiber"
-												>High Fiber</label
-											>
+											<label for="high-fiber">High Fiber</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -265,9 +250,7 @@ watch(
 												v-model="dietLabels.highProtein"
 												true-value="high-protein"
 											/>
-											<label for="high-protein"
-												>High Protein</label
-											>
+											<label for="high-protein">High Protein</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -276,9 +259,7 @@ watch(
 												v-model="dietLabels.lowCarb"
 												true-value="low-carb"
 											/>
-											<label for="low-carb"
-												>Low Carb</label
-											>
+											<label for="low-carb">Low Carb</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -296,17 +277,10 @@ watch(
 												v-model="dietLabels.lowSodium"
 												true-value="low-sodium"
 											/>
-											<label for="low-sodium"
-												>Low Sodium</label
-											>
+											<label for="low-sodium">Low Sodium</label>
 										</div>
 										<div class="form-button">
-											<button
-												type="submit"
-												class="btn btn-sm"
-											>
-												Apply
-											</button>
+											<button type="submit" class="btn btn-sm">Apply</button>
 											<button
 												type="button"
 												class="btn btn-outline btn-sm"
@@ -325,14 +299,10 @@ watch(
 							class="filter-dropdown"
 							:class="{
 								active:
-									routeQueries.cuisines &&
-									routeQueries.cuisines.length > 0,
+									routeQueries.cuisines && routeQueries.cuisines.length > 0,
 							}"
 						>
-							<div
-								class="dropdown-header"
-								@click="openCuisineDropdown"
-							>
+							<div class="dropdown-header" @click="openCuisineDropdown">
 								<span>Cuisine Type</span>
 								<font-awesome-icon
 									icon="chevron-down"
@@ -343,14 +313,8 @@ watch(
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="cuisineDropdown"
-								>
-									<form
-										class="dropdown-form"
-										@submit.prevent="filterCuisine"
-									>
+								<div class="dropdown-content" v-show="cuisineDropdown">
+									<form class="dropdown-form" @submit.prevent="filterCuisine">
 										<div class="form-group">
 											<input
 												id="american"
@@ -358,9 +322,7 @@ watch(
 												v-model="cuisineTypes.american"
 												true-value="American"
 											/>
-											<label for="american"
-												>American</label
-											>
+											<label for="american">American</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -396,17 +358,10 @@ watch(
 												v-model="cuisineTypes.japanese"
 												true-value="Japanese"
 											/>
-											<label for="japanse"
-												>Japanese</label
-											>
+											<label for="japanse">Japanese</label>
 										</div>
 										<div class="form-button">
-											<button
-												type="submit"
-												class="btn btn-sm"
-											>
-												Apply
-											</button>
+											<button type="submit" class="btn btn-sm">Apply</button>
 											<button
 												type="button"
 												class="btn btn-outline btn-sm"
@@ -424,15 +379,10 @@ watch(
 						<div
 							class="filter-dropdown"
 							:class="{
-								active:
-									routeQueries.meals &&
-									routeQueries.meals.length > 0,
+								active: routeQueries.meals && routeQueries.meals.length > 0,
 							}"
 						>
-							<div
-								class="dropdown-header"
-								@click="openMealDropdown"
-							>
+							<div class="dropdown-header" @click="openMealDropdown">
 								<span>Meal Type</span>
 								<font-awesome-icon
 									icon="chevron-down"
@@ -443,14 +393,8 @@ watch(
 								/>
 							</div>
 							<Transition name="dropdown">
-								<div
-									class="dropdown-content"
-									v-show="mealDropdown"
-								>
-									<form
-										class="dropdown-form"
-										@submit.prevent="filterMeal"
-									>
+								<div class="dropdown-content" v-show="mealDropdown">
+									<form class="dropdown-form" @submit.prevent="filterMeal">
 										<div class="form-group">
 											<input
 												id="breakfast"
@@ -458,9 +402,7 @@ watch(
 												v-model="mealTypes.breakfast"
 												true-value="Breakfast"
 											/>
-											<label for="breakfast"
-												>Breakfast</label
-											>
+											<label for="breakfast">Breakfast</label>
 										</div>
 										<div class="form-group">
 											<input
@@ -499,12 +441,7 @@ watch(
 											<label for="teatime">Teatime</label>
 										</div>
 										<div class="form-button">
-											<button
-												type="submit"
-												class="btn btn-sm"
-											>
-												Apply
-											</button>
+											<button type="submit" class="btn btn-sm">Apply</button>
 											<button
 												type="button"
 												class="btn btn-outline btn-sm"
@@ -519,10 +456,7 @@ watch(
 						</div>
 
 						<!-- Seach form -->
-						<form
-							class="search-form"
-							@submit.prevent="searchRecipes"
-						>
+						<form class="search-form" @submit.prevent="searchRecipes">
 							<input
 								type="text"
 								placeholder="Search recipes..."
@@ -535,9 +469,7 @@ watch(
 					<div
 						class="filters-label"
 						v-if="
-							routeQueries.diets ||
-							routeQueries.cuisines ||
-							routeQueries.meals
+							routeQueries.diets || routeQueries.cuisines || routeQueries.meals
 						"
 					>
 						<span
@@ -589,10 +521,7 @@ watch(
 
 				<!-- Recipes List -->
 				<ul class="recipes-list">
-					<li
-						v-for="recipe in recipes.hits"
-						:key="recipe._links.self.href"
-					>
+					<li v-for="recipe in recipes.hits" :key="recipe._links.self.href">
 						<RecipeItem :recipe="recipe" />
 					</li>
 				</ul>
@@ -771,24 +700,6 @@ watch(
 
 		.subtitle p {
 			font-weight: 500;
-		}
-	}
-
-	.recipes-list {
-		padding: 32px 0;
-		list-style: none;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 32px;
-
-		@media screen and (min-width: 768px) {
-			grid-template-columns: repeat(2, 1fr);
-			column-gap: 32px;
-			row-gap: 48px;
-		}
-
-		@media screen and (min-width: 992px) {
-			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 

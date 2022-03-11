@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue';
-// import RecipeItem from '@/components/RecipeItem.vue';
+import RecipeItem from '@/components/RecipeItem.vue';
 
 const savedRecipes = inject('savedRecipes');
 
@@ -14,7 +14,7 @@ console.log(savedRecipes.value);
 
 			<ul class="recipes-list" v-if="savedRecipes.length">
 				<li v-for="recipe in savedRecipes" :key="recipe.id">
-					{{ recipe.recipe.label }}
+					<RecipeItem :recipe="recipe" />
 				</li>
 			</ul>
 
