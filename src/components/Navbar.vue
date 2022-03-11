@@ -7,9 +7,7 @@ import IconLove from '@/components/icons/IconLove.vue';
 <template>
 	<nav class="nav">
 		<div class="container">
-			<a href="/">
-				<span class="logo">Masyak</span>
-			</a>
+			<a class="logo" href="/"> Cookzy </a>
 
 			<ul class="nav-list">
 				<li class="nav-item">
