@@ -2,7 +2,7 @@
 
 Cookzy is an front-end application to you for find your best and favorite food recipe in a fun way. It's beacuse cook is easy. You can search food by keyword, filter based on your preferences and save it for later.
 
-Production site: ...
+Production site: https://cookzy.netlify.app
 
 ## 📦 Features
 
